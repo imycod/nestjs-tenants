@@ -1,0 +1,31 @@
+# 生产环境配置
+app:
+  port: 3000
+  env: prod
+
+database:
+  host: localhost
+  port: 5432
+  username: postgres
+  password: postgres
+  database: tenant_db
+  sync: false
+  logging: false
+
+mongodb:
+  host: localhost
+  port: 27017
+  username: ''
+  password: ''
+  database: logs
+  sync: false 
+  logging: true
+
+redis:
+  host: localhost
+  port: 6379
+  password: ""
+
+logging:
+  level: info
+  dir: logs

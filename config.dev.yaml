@@ -1,0 +1,31 @@
+# 开发环境配置
+app:
+  port: 3000
+  env: dev
+
+database:
+  host: localhost
+  port: 5432
+  username: postgres
+  password: pWXS19971222
+  database: tenant_db
+  sync: true
+  logging: true
+
+mongodb:
+  host: localhost
+  port: 27017
+  username: ''
+  password: ''
+  database: logs
+  sync: true 
+  logging: true
+
+redis:
+  host: localhost
+  port: 6379
+  password: ""
+
+logging:
+  level: debug
+  dir: logs
