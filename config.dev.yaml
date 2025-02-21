@@ -10,7 +10,7 @@ database:
   password: pWXS19971222
   database: tenant_db
   sync: true
-  logging: true
+  logging: false
 
 mongodb:
   host: localhost

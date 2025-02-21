@@ -1,8 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { Tenant } from './tenant.postsql.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('users')
-export class User {
+export class TenantUser {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -23,13 +22,6 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
-
-  @ManyToOne(() => Tenant)
-  @JoinColumn({ name: 'tenant_id' })
-  tenant: Tenant;
-
-  @Column()
-  tenantId: string;
 
   @CreateDateColumn()
   createdAt: Date;

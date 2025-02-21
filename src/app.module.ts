@@ -9,6 +9,9 @@ import * as yaml from 'js-yaml';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { Config } from './types/config.interface';
+import { TenantSchemaModule } from './tenant-schema/tenant-schema.module';
+import { TenantUserModule } from './tenant-user/tenant-user.module';
+import { TenantEmployeeModule } from './tenant-employee/tenant-employee.module';
 
 
 @Module({
@@ -25,7 +28,10 @@ import { Config } from './types/config.interface';
     }),
     DatabaseModule,
     TenantModule,
+    TenantSchemaModule,
+    TenantUserModule,
     LoggerModule,
+    TenantEmployeeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

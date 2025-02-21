@@ -11,7 +11,7 @@ export class Tenant {
   @Column({ unique: true })
   subdomain: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   schema: string;
 
   @Column({ default: true })
