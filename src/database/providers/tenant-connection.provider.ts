@@ -1,23 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DataSource, DataSourceOptions, EntitySchema } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { TenantContextService } from 'src/tenant/services/tenant-context.service';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { TenantEmployee } from 'src/tenant-employee/entities/tenant-employee.postsql.entity';
-import { join } from 'path';
-import * as glob from 'glob';
-
-// 定义一个类型来表示 TypeORM 实体类或实体 schema
-type EntityType = Function | string | EntitySchema;
 
 @Injectable()
 export class TenantConnectionProvider {
   private dataSources: Map<string, DataSource> = new Map();
-  private entitiesCache: (Function | EntitySchema)[] | null = null;
 
   constructor(
     private readonly tenantContextService: TenantContextService,
     @Inject('DATABASE_OPTIONS') private readonly baseOptions: PostgresConnectionOptions,
-  ) {   }
+  ) { }
 
   async getConnection(): Promise<DataSource> {
     const tenant = this.tenantContextService.getTenant();
@@ -29,6 +22,7 @@ export class TenantConnectionProvider {
       const options: DataSourceOptions = {
         ...this.baseOptions,
         schema: tenant.schema,
+        entities: (this.baseOptions as any).tenantEntities || []  // 使用租户实体
       };
 
       dataSource = new DataSource(options);
@@ -55,10 +49,10 @@ export class TenantConnectionProvider {
       const options: DataSourceOptions = {
         ...this.baseOptions,
         schema,
+        entities: (this.baseOptions as any).tenantEntities || []  // 使用租户实体
       };
 
       dataSource = new DataSource(options);
-        
       await dataSource.initialize();
       this.dataSources.set(schema, dataSource);
     }

@@ -2,14 +2,25 @@ import { Module, Global } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 // import { TenantConnectionProvider } from './providers/tenant-connection.provider';
-import { DataSourceOptions } from 'typeorm';
-import { time } from 'console';
 import { TenantConnectionProvider } from './providers/tenant-connection.provider';
 
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { filterEntities } from './utils/entity-filter';
 
-const getDatabaseConfig = (configService: ConfigService): PostgresConnectionOptions => {
-  const database = configService.get('database')
+interface CustomPostgresConnectionOptions extends PostgresConnectionOptions {
+  tenantEntities: string[];
+}
+
+const getDatabaseConfig = (configService: ConfigService): CustomPostgresConnectionOptions => {
+  const database = configService.get('database');
+  const baseDir = __dirname + '/../';
+
+  // public schema 的实体（包含 tenant 相关实体）
+  const publicEntities = [baseDir + 'tenant/**/*.postsql.entity{.ts,.js}'];
+
+  // 租户 schema 的实体（排除 tenant 文件夹）
+  const tenantEntities = filterEntities(baseDir, ['tenant']);
+
   return {
     type: 'postgres',
     host: database.host,
@@ -17,9 +28,10 @@ const getDatabaseConfig = (configService: ConfigService): PostgresConnectionOpti
     username: database.username,
     password: database.password,
     database: database.database,
-    entities: [__dirname + '/../**/*.postsql.entity{.ts,.js}'],
+    entities: publicEntities,  // 只包含 public schema 的实体
     synchronize: database.sync,
     logging: database.logging,
+    tenantEntities
   }
 }
 

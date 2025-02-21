@@ -12,11 +12,11 @@ export class TenantEmployee {
   @Column({ length: 50, unique: true })
   code: string;
 
-  @Column({ length: 100 })
+  @Column({ nullable: true  })
   @IsOptional()
   department: string;
 
-  @Column({ length: 100 })
+  @Column({ nullable: true })
   @IsOptional()
   position: string;
 
